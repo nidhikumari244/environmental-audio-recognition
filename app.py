@@ -103,6 +103,14 @@ def prettify_label(label):
     return label.replace("_", " ").title()
 
 
+def find_category_image(label):
+    for extension in (".jpg", ".jpeg", ".png", ".webp"):
+        image_path = os.path.join(DEMO_IMAGE_DIR, f"{label}{extension}")
+        if os.path.exists(image_path):
+            return image_path
+    return None
+
+
 def build_spectrogram_figure(path):
     spectrogram = extract_logmel(path)
     fig, ax = plt.subplots(figsize=(4.1, 3.0))
@@ -116,8 +124,8 @@ def build_spectrogram_figure(path):
 
 
 def display_category_image(label, caption=""):
-    image_path = os.path.join(DEMO_IMAGE_DIR, f"{label}.png")
-    if os.path.exists(image_path):
+    image_path = find_category_image(label)
+    if image_path:
         st.image(image_path, caption=caption or prettify_label(label), use_container_width=True)
     else:
         st.info(prettify_label(label))
